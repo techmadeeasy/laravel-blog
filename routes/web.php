@@ -14,15 +14,15 @@
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
-//    return view('welcome');
+    return view('welcome');
 
-    $data = [
-        "title"=>"Hi I hope you are doing fine",
-        "content"=>"Created with lots of love",
-    ];
-    Mail::send("email.test", $data, function($message){
-        $message->to("djerryboy2@gmail.com")->subject("Hi, what's up");
-    });
+//    $data = [
+//        "title"=>"Hi I hope you are doing fine",
+//        "content"=>"Created with lots of love",
+//    ];
+//    Mail::send("email.test", $data, function($message){
+//        $message->to("djerryboy2@gmail.com")->subject("Hi, what's up");
+//    });
 });
 
 Auth::routes();

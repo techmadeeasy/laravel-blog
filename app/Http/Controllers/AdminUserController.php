@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Photo;
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminUserController extends Controller
 {
@@ -13,7 +18,9 @@ class AdminUserController extends Controller
      */
     public function index()
     {
-        return view("admin.users.index");
+        $users = User::all();
+
+        return view("admin.users.index", compact("users"));
     }
 
     /**
@@ -23,18 +30,29 @@ class AdminUserController extends Controller
      */
     public function create()
     {
-        //
+        $all = Role::all();
+        return view("admin.users.create", compact("all"));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|string
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+
+         if($request->hasFile("image")){
+             $filename = $request->file("image")->getClientOriginalName();
+             $filesave = $request->file("image")->storeAs("public/images", $filename);
+             $image = Photo::create(["name"=>$filename]);
+         }else{
+             $photo_id = "";
+         }
+         $photo_id = $image->id;
+         $user = User::create(["name"=>$request->get("name"), "is_active"=>$request->get("is_active"), "email"=>$request->get("email"), "role_id"=>$request->get("role"), "photo_id"=>$photo_id,"password"=>bcrypt($request->get("password"))]);
+        return "yea";
     }
 
     /**
@@ -56,7 +74,9 @@ class AdminUserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user= User::findorFail($id);
+        $role = Role::all();
+        return view("admin.users.edit", compact("user","role"));
     }
 
     /**
@@ -66,9 +86,33 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
+
     {
-        //
+       $users = new User;
+       $user = $users->findorFail($id);
+       $user->name = $request->get("name");
+       $user->email = $request->get("email");
+       $user->role_id = $request->get("role");
+       $user->is_active = $request->get("is_active");
+        if(trim($request->get("password"))==""){
+            $request->get("password");
+       }
+        else{
+            $password = bcrypt($request->get("password"));
+            $user->password = $password;
+        }
+       $user->save();
+
+       if($request->hasFile("image")){
+           $photo = Photo::findorFail($user->id);
+           $name  = $request->file("image")->getClientOriginalName();
+           $move = $request->file("image")->storeAs("public/images", $name);
+           $photo->name=$name;
+           $photo->save();
+       }
+       return back()->with("message", "Successful");
+
     }
 
     /**
