@@ -2,12 +2,15 @@
 
 @section("content")
   <div class="card mb-3 align-content-center">
+
                   <div class="card-header">
-                      <i class="fas fa-table"></i>
-                      Data Table Example</div>
+                      @if(session()->has("message"))
+                          <div><span class="alert alert-success">{{ session()->get("message") }}</span></div>
+                      @endif</div>
                   <div class="card-body">
                       <div class="table-responsive">
-                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+
+                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                               <thead>
                               <tr>
                                   <th>ID</th>
@@ -17,6 +20,7 @@
                                   <th>Role</th>
                                   <th>Active</th>
                                   <th>Created_at</th>
+                                  <th>action</th>
                               </tr>
                               </thead>
                               <tbody>
@@ -34,6 +38,19 @@
                                             Not Active
                                           @endif </td>
                                   <td>{{ $user->created_at->diffforHumans() }}</td>
+                                  <td>
+                                      <div class="btn-group">
+
+                                          <form method="post" action="{{ route('users.destroy', $user->id) }}">
+                                              @method("DELETE")
+                                              {{ csrf_field() }}
+                                              <button type="submit" class="btn btn-sm btn-secondary js-tooltip-enabled" data-toggle="tooltip" title="" data-original-title="Edit">
+                                                  <i class="fa fa-times"></i>
+                                              </button>
+                                          </form>
+
+                                      </div>
+                                  </td>
                               </tr>
                                   @endforeach
                               </tbody>

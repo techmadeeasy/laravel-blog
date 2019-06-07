@@ -33,8 +33,7 @@ class AdminUserController extends Controller
         $all = Role::all();
         return view("admin.users.create", compact("all"));
     }
-
-    /**
+    /**s
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -52,7 +51,7 @@ class AdminUserController extends Controller
          }
          $photo_id = $image->id;
          $user = User::create(["name"=>$request->get("name"), "is_active"=>$request->get("is_active"), "email"=>$request->get("email"), "role_id"=>$request->get("role"), "photo_id"=>$photo_id,"password"=>bcrypt($request->get("password"))]);
-        return "yea";
+        return view("admin.users.index")->with("message", "New User successfully added!");
     }
 
     /**
@@ -86,23 +85,26 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
 
     {
+        $request->validate([
+            "name"=>"required",
+            "email"=>"required",
+            "role"=>"required",
+            "is_active"=>"required"
+        ]);
        $users = new User;
        $user = $users->findorFail($id);
        $user->name = $request->get("name");
        $user->email = $request->get("email");
        $user->role_id = $request->get("role");
        $user->is_active = $request->get("is_active");
-        if(trim($request->get("password"))==""){
-            $request->get("password");
-       }
-        else{
+        if(trim($request->get("password"))!=""){
             $password = bcrypt($request->get("password"));
             $user->password = $password;
-        }
-       $user->save();
+       }
+
 
        if($request->hasFile("image")){
            $photo = Photo::findorFail($user->id);
@@ -110,8 +112,10 @@ class AdminUserController extends Controller
            $move = $request->file("image")->storeAs("public/images", $name);
            $photo->name=$name;
            $photo->save();
+           $user->photo_id = $photo->id;
        }
-       return back()->with("message", "Successful");
+        $user->save();
+       return back()->with("message", "Successfully deleted");
 
     }
 
@@ -123,6 +127,9 @@ class AdminUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+       $user = User::findorFail($id);
+    //  $userimg = unlink(public_path() . "/" .$user->photos->name );
+        $user->delete();
+        return back()->with(["message"=>"Successfully deleted"]);
     }
 }

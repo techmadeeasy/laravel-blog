@@ -5,6 +5,9 @@
 
     <div class="container">
         <h1>Edit users</h1>
+        @if(session()->has("message"))
+            <div class="mt-20 mb-50"><span class="alert alert-success">{{ session()->get("message") }}</span></div>
+        @endif
         <div class="row" style="padding: 20px;">
             <div class="col-md-3">
                 <img src="/{{ $user->photos->name }}" alt="profile pic" class="img-avatar">
@@ -19,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName">Email address</label>
-                        <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        <input type="email" class="form-control" value="{{ $user->email }}" name="email" aria-describedby="emailHelp" placeholder="Enter email">
                         @if($errors->get("email"))
                             @foreach ($errors as $error)
                                 {{ $error->get("email") }}
