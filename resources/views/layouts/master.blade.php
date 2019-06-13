@@ -445,7 +445,7 @@ MAIN CONTENT LAYOUT
                         </a>
                         <ul class="list-inline mt-10">
                             <li class="list-inline-item">
-                                <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="be_pages_generic_profile.html">J. Smith</a>
+                                <a class="link-effect text-dual-primary-dark font-size-xs font-w600 text-uppercase" href="be_pages_generic_profile.html">{{ Auth::user()->name }}</a>
                             </li>
                             <li class="list-inline-item">
                                 <!-- Layout API, functionality initialized in Codebase() -> uiApiLayout() -->
@@ -482,25 +482,27 @@ MAIN CONTENT LAYOUT
                                         <li>
                                             <a href="{{ route('users.index') }}"><span class="sidebar-mini-hide">Users</span></a>
                                         </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">Post</span></a>
+                                    <ul>
                                         <li>
-                                            <a href="be_pages_dashboard4.html"><span class="sidebar-mini-hide">Dashboard 4</span></a>
+                                            <a href="{{ route("posts.index") }}">Posts</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route("posts.create") }}">Create Post</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">Crypto</span></a>
+                                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">Category</span></a>
                                     <ul>
                                         <li>
-                                            <a href="be_pages_crypto_dashboard.html">Dashboard</a>
+                                            <a href="{{ route("categories.index") }}">Categories</a>
                                         </li>
                                         <li>
-                                            <a href="be_pages_crypto_buy_sell.html">Buy/Sell</a>
-                                        </li>
-                                        <li>
-                                            <a href="be_pages_crypto_wallets.html">Wallets</a>
-                                        </li>
-                                        <li>
-                                            <a href="be_pages_crypto_settings.html">Settings</a>
+                                            <a href="{{ route("categories.create") }}">New Categories</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -1209,7 +1211,7 @@ MAIN CONTENT LAYOUT
                 <div class="btn-group" role="group">
                     <button type="button" class="btn btn-rounded btn-dual-secondary" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-user d-sm-none"></i>
-                        <span class="d-none d-sm-inline-block">J. Smith</span>
+                        <span class="d-none d-sm-inline-block">{{  Auth::user()->name }}</span>
                         <i class="fa fa-angle-down ml-5"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">
@@ -1234,7 +1236,7 @@ MAIN CONTENT LAYOUT
                         <!-- END Side Overlay -->
 
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="op_auth_signin.html">
+                        <a class="dropdown-item" href="{{ route('logout') }}">
                             <i class="si si-logout mr-5"></i> Sign Out
                         </a>
                     </div>

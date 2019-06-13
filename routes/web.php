@@ -33,6 +33,8 @@ Route::get("/admin", function (){
     return view("admin.index");
 });
 
-Route::group(["middleware"=>"admin"], function(){
-    Route::resource("/admin/users", "AdminUserController");
+Route::middleware(["admin"])->prefix("admin")->group( function(){
+    Route::resource("/users", "AdminUserController");
+    Route::resource("/posts", "AdminPostsController");
+    Route::resource("/categories", "CategoryController");
 });

@@ -16,6 +16,10 @@ class Photo extends Model
         return $this->hasMany("App\User");
     }
 
+    public function posts(){
+        return $this->hasMany("App\Post");
+    }
+
     public function getNameAttribute($photo){
         return $this->directory . $photo;
     }

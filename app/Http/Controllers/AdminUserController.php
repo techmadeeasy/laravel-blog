@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Photo;
+use App\Post;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -127,9 +128,12 @@ class AdminUserController extends Controller
      */
     public function destroy($id)
     {
-       $user = User::findorFail($id);
+      $user = User::findorFail($id)->posts;
+      foreach ($user as $us){
+          $us->delete();
+      }
+
     //  $userimg = unlink(public_path() . "/" .$user->photos->name );
-        $user->delete();
         return back()->with(["message"=>"Successfully deleted"]);
     }
 }
