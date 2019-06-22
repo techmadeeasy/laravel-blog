@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Photo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class CategoryController extends Controller
+class MediaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view("admin.categories.index", compact("categories"));
+        $photos = Photo::all();
+        return view("admin.media.index", compact("photos"));
     }
 
     /**
@@ -25,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view("admin.media.upload");
     }
 
     /**
@@ -36,8 +37,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $cat = Category::create(["name"=>$request->get("category")]);
-        return back()->with("message", "New category added!");
+        $file = $request->file("file");
+        $name = time() . $file->getClientOriginalName();
+        $store = $file->storeAs("public/images", $name);
+        $storeRec = Photo::create(["name"=>$name]);
     }
 
     /**
@@ -59,8 +62,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $categories = Category::findorFail($id);
-        return view("admin.categories.edit", compact("categories"));
+        //
     }
 
     /**
@@ -72,14 +74,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cat = Category::findorFail($id);
-        $request->validate([
-            "category"=>"required|min:4",
-        ]);
-        $cat->name = $request->get("category");
-        $cat->save();
-
-        return redirect("/admin/categories")->with("message", "yeyay!!!");
+        //
     }
 
     /**
@@ -90,7 +85,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $cat = Category::findorFail($id)->delete();
-        return back()->with("message", "Category deleted");
+
+        $image = Photo::findOrfail($id);
+        $delete = unlink(storage_path() . "/". $image->name);
+        return back();
     }
 }
