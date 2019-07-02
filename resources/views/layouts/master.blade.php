@@ -517,6 +517,17 @@ MAIN CONTENT LAYOUT
                                         </li>
                                     </ul>
                                 </li>
+                                <li>
+                                    <a class="nav-submenu" data-toggle="nav-submenu" href="#"><span class="sidebar-mini-hide">Comment</span></a>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ route('comments.index') }}">All comments</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('comments.create') }}">Upload</a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                     </ul>

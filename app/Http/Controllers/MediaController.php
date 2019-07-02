@@ -65,6 +65,7 @@ class MediaController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -87,7 +88,7 @@ class MediaController extends Controller
     {
 
         $image = Photo::findOrfail($id);
-        $delete = unlink(storage_path() . "/". $image->name);
-        return back();
+        $delete = Storage::delete($image->name);
+       // return back();
     }
 }

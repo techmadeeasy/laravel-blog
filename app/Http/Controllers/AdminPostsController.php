@@ -9,6 +9,7 @@ use App\Post;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AdminPostsController extends Controller
 {
@@ -20,7 +21,14 @@ class AdminPostsController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view("admin.posts.index", compact("posts"));
+        $route = Route::currentRouteName();
+        if(!$route=="index"){
+            return view("admin.posts.index", compact("posts"));
+        }
+        else{
+            return view("index", compact("posts"));
+        }
+
     }
 
     /**
@@ -64,7 +72,8 @@ class AdminPostsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::findorFail($id);
+        return view("blog", compact("post"));
     }
 
     /**
