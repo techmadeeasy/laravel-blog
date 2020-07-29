@@ -28,6 +28,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/logbook', 'HomeController@storeTodo')->name('book');
+Route::get('/logbook-pull', 'HomeController@ShowTodo')->name('bookw');
 
 Route::get("/index", "AdminPostsController@index")->name("index");
 Route::get("/blog/{id}", "AdminPostsController@show")->name("blog");
